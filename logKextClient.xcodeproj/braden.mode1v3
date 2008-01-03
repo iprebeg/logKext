@@ -379,9 +379,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F86BBC1F0D2305EB0049C141</string>
+				<string>F81369C10D2D37DF00B9C702</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F86BBC200D2305EB0049C141</string>
+				<string>F81369C20D2D37DF00B9C702</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -513,7 +513,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>/Users/braden/Developer/code/logKext/logKextClient.xcodeproj</string>
+		<string>F86CC3CF0D12E2B60038E494</string>
+		<string>/Users/braden/Developer/code/logkext/logKextClient.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>577 238 641 310 0 0 1280 778 </string>
@@ -593,7 +594,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>F86CC3CF0D12E2B60038E494</string>
-				<string>F890ACAE0D22FC3B00A9C9B9</string>
+				<string>F81369C30D2D37DF00B9C702</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

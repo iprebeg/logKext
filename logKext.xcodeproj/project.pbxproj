@@ -260,7 +260,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker --doc $BUILD_DIR/packageGen/logKext.pmdoc -o $BUILD_DIR/logKext.pkg\n";
+			shellScript = "cp -R $BUILD_DIR/packageGen/logKext.pmdoc $BUILD_DIR/packageGen/logKextCopy.pmdoc\n/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker --doc $BUILD_DIR/packageGen/logKextCopy.pmdoc -o $BUILD_DIR/logKext.pkg\nrm -rf $BUILD_DIR/packageGen/logKextCopy.pmdoc";
 		};
 /* End PBXShellScriptBuildPhase section */
 

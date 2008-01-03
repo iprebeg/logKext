@@ -306,10 +306,11 @@ void makeEncryptKey(CFStringRef pass)
 {
 	UInt32 passLen;
 	void* passData;
+	SecKeychainSetUserInteractionAllowed(TRUE);
 	OSStatus secRes = SecKeychainFindGenericPassword(NULL, strlen("logKextPassKey"), "logKextPassKey", NULL, NULL, &passLen, &passData, NULL);
 	if (secRes && secRes != errSecItemNotFound)
 	{
-		syslog(LOG_ERR,"Error finding passKey in keychain.  Using default.");
+		syslog(LOG_ERR,"Error finding passKey in keychain (%d).  Using default.",secRes);
 		passData=(void*)DEFAULT_PASSKEY;
 		passLen=strlen((char*)passData);
 	}

@@ -23,8 +23,6 @@
 #undef private
 #undef protected
 
-#define DEBUG
-
 void logAction(OSObject *,unsigned,unsigned,unsigned,unsigned,
 				unsigned,unsigned,unsigned,unsigned,bool,AbsoluteTime);
 				

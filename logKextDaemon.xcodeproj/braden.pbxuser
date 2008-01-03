@@ -57,8 +57,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 220399075;
-			PBXWorkspaceStateSaveDate = 220399075;
+			PBXPerProjectTemplateStateSaveDate = 221067458;
+			PBXWorkspaceStateSaveDate = 221067458;
 		};
 		sourceControlManager = F8D1916008EE2BFD00196CFE /* Source Control */;
 		userBuildSettings = {
@@ -73,8 +73,8 @@
 	F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {464, 378}}";
-			sepNavSelRange = "{490, 0}";
-			sepNavVisRange = "{0, 503}";
+			sepNavSelRange = "{488, 0}";
+			sepNavVisRange = "{0, 501}";
 			sepNavWindowFrame = "{{38, 255}, {523, 497}}";
 		};
 	};
@@ -116,9 +116,9 @@
 	};
 	F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {831, 8162}}";
-			sepNavSelRange = "{194, 25}";
-			sepNavVisRange = "{0, 783}";
+			sepNavIntBoundsRect = "{{0, 0}, {1076, 7938}}";
+			sepNavSelRange = "{7539, 0}";
+			sepNavVisRange = "{6949, 1441}";
 			sepNavVisRect = "{{0, 2684}, {740, 107}}";
 			sepNavWindowFrame = "{{46, 133}, {890, 645}}";
 		};

