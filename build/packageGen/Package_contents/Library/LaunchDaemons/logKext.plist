@@ -10,7 +10,7 @@
 	<false/>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/System/Library/Filesystems/logKextDaemon</string>
+		<string>/Library/Application Support/logKext/logKextDaemon</string>
 	</array>
 	<key>UserName</key>
 	<string>root</string>

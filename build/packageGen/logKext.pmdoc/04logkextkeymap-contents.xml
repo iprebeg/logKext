@@ -1,1 +1,1 @@
-<pkg-contents spec="1.12"><f n="logKextKeymap.plist" o="root" g="wheel" p="33188" pt="/Users/braden/Developer/code/logkext/build/packageGen/Package_contents/Library/Preferences/logKextKeymap.plist" m="false" t="file"><mod>owner</mod><mod>group</mod></f></pkg-contents>
+<pkg-contents spec="1.12"><f n="logKextKeymap.plist" o="root" g="wheel" p="33188" pt="/Users/braden/Developer/code/logkext/build/packageGen/Package_contents/Library/Application Support/logKext/logKextKeymap.plist" m="false" t="file"><mod>owner</mod><mod>group</mod></f></pkg-contents>

@@ -16,6 +16,7 @@
 		F890ACBD0D22FF2900A9C9B9 /* logKext.kext in Copy Extension */ = {isa = PBXBuildFile; fileRef = 32D94FD00562CBF700B6AF17 /* logKext.kext */; };
 		F890ACC80D22FF8B00A9C9B9 /* logKextDaemon in Copy Daemon */ = {isa = PBXBuildFile; fileRef = F86CC3930D12DF530038E494 /* logKextDaemon */; };
 		F890ACD30D22FFD600A9C9B9 /* logKextClient in Copy Client */ = {isa = PBXBuildFile; fileRef = F86CC3A90D12DF8A0038E494 /* logKextClient */; };
+		F8C99C6D0D33D2C4009A32D9 /* logKextKeyGen in Copy KeyGen */ = {isa = PBXBuildFile; fileRef = F8A3F9590D3315D30073D03B /* logKextKeyGen */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
 			remoteInfo = logKextClient;
+		};
+		F8A3F9580D3315D30073D03B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
+			remoteInfo = logKextKeyGen;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -50,7 +58,7 @@
 		F890ACBF0D22FF4100A9C9B9 /* Copy Daemon */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = ../packageGen/Package_contents/System/Library/Filesystems;
+			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
 			dstSubfolderSpec = 16;
 			files = (
 				F890ACC80D22FF8B00A9C9B9 /* logKextDaemon in Copy Daemon */,
@@ -69,6 +77,17 @@
 			name = "Copy Client";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F8C99C750D33D2E2009A32D9 /* Copy KeyGen */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
+			dstSubfolderSpec = 16;
+			files = (
+				F8C99C6D0D33D2C4009A32D9 /* logKextKeyGen in Copy KeyGen */,
+			);
+			name = "Copy KeyGen";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +102,7 @@
 		F82A25A308EDD9020077C8EA /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logKextCommon.h; sourceTree = "<group>"; };
 		F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextDaemon.xcodeproj; path = /Users/braden/Developer/code/logKext/logKextDaemon.xcodeproj; sourceTree = "<absolute>"; };
 		F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextClient.xcodeproj; path = /Users/braden/Developer/code/logKext/logKextClient.xcodeproj; sourceTree = "<absolute>"; };
+		F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextKeyGen.xcodeproj; path = /Users/braden/Developer/code/logkext/logKextKeyGen.xcodeproj; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +122,7 @@
 				247142CAFF3F8F9811CA285C /* Source */,
 				F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */,
 				F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */,
+				F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */,
 				8DA8362C06AD9B9200E5AC22 /* Kernel.framework */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
@@ -154,6 +175,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F8A3F9550D3315D30073D03B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F8A3F9590D3315D30073D03B /* logKextKeyGen */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -181,6 +210,7 @@
 				F890ACBC0D22FCA100A9C9B9 /* Copy Extension */,
 				F890ACBF0D22FF4100A9C9B9 /* Copy Daemon */,
 				F890ACCE0D22FF9C00A9C9B9 /* Copy Client */,
+				F8C99C750D33D2E2009A32D9 /* Copy KeyGen */,
 				F890ACE00D23006C00A9C9B9 /* ShellScript */,
 			);
 			buildRules = (
@@ -212,6 +242,10 @@
 					ProductGroup = F86CC38C0D12DF530038E494 /* Products */;
 					ProjectRef = F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */;
 				},
+				{
+					ProductGroup = F8A3F9550D3315D30073D03B /* Products */;
+					ProjectRef = F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -233,6 +267,13 @@
 			fileType = "compiled.mach-o.executable";
 			path = logKextClient;
 			remoteRef = F86CC3A80D12DF8A0038E494 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F8A3F9590D3315D30073D03B /* logKextKeyGen */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = logKextKeyGen;
+			remoteRef = F8A3F9580D3315D30073D03B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

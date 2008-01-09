@@ -13,6 +13,20 @@
 			F8D1915B08EE2BF700196CFE /* logKextDaemon */,
 		);
 		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					57.58349609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
@@ -57,8 +71,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 221067458;
-			PBXWorkspaceStateSaveDate = 221067458;
+			PBXPerProjectTemplateStateSaveDate = 221584929;
+			PBXWorkspaceStateSaveDate = 221584929;
 		};
 		sourceControlManager = F8D1916008EE2BFD00196CFE /* Source Control */;
 		userBuildSettings = {
@@ -72,9 +86,9 @@
 	};
 	F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {464, 378}}";
+			sepNavIntBoundsRect = "{{0, 0}, {524, 504}}";
 			sepNavSelRange = "{488, 0}";
-			sepNavVisRange = "{0, 501}";
+			sepNavVisRange = "{241, 756}";
 			sepNavWindowFrame = "{{38, 255}, {523, 497}}";
 		};
 	};
@@ -116,9 +130,9 @@
 	};
 	F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1076, 7938}}";
-			sepNavSelRange = "{7539, 0}";
-			sepNavVisRange = "{6949, 1441}";
+			sepNavIntBoundsRect = "{{0, 0}, {1076, 8064}}";
+			sepNavSelRange = "{9055, 0}";
+			sepNavVisRange = "{7357, 1135}";
 			sepNavVisRect = "{{0, 2684}, {740, 107}}";
 			sepNavWindowFrame = "{{46, 133}, {890, 645}}";
 		};

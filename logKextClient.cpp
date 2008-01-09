@@ -1,10 +1,21 @@
 /*
- *  logKextClient.cpp
- *  logKext
- *
- *  Created by Braden Thomas on Fri Oct 08 2004.
- *
- */
+	logKextClient.cpp
+	logKext
+
+   Copyright 2007 Braden Thomas
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 
 #include <unistd.h>
 #include <stdio.h>
@@ -470,26 +481,33 @@ long file_length(CFStringRef pathName)
 
 void makeEncryptKey()
 {
+	SecKeychainRef sysChain;
+	OSStatus secRes = SecKeychainOpen("/Library/Keychains/System.keychain", &sysChain);
+	if (secRes)
+	{
+		printf("Couldn't get system keychain: %d\n",secRes);
+		return;
+	}
+
 	CFStringRef password = (CFStringRef)CFPreferencesCopyAppValue(CFSTR("Password"),PREF_DOMAIN);
 	if (!password)
 		return;
 
 	UInt32 passLen;
 	void* passData;
-	OSStatus secRes = SecKeychainFindGenericPassword(NULL, strlen("logKextPassKey"), "logKextPassKey", NULL, NULL, &passLen, &passData, NULL);
-	if (secRes && secRes != errSecItemNotFound)
+	secRes = SecKeychainFindGenericPassword(sysChain, strlen("logKextPassKey"), "logKextPassKey", NULL, NULL, &passLen, &passData, NULL);
+	if (secRes)
 	{
-		printf("Error finding passKey in keychain.  Using default.\n");
-		passData=(void*)DEFAULT_PASSKEY;
-		passLen=strlen((char*)passData);
+		printf("Error finding passKey in keychain (%d). Failing\n",secRes);
+		exit(-1);
 	}
-	else if (secRes == errSecItemNotFound)
-	{
-		passData = malloc(16);
-		RAND_bytes((unsigned char*)passData, 16);
-		passLen=16;
-		SecKeychainAddGenericPassword(NULL, strlen("logKextPassKey"), "logKextPassKey", NULL, NULL, 16, passData, NULL);
-	}
+/*	
+	printf("Using encryption key %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n",
+		((char*)passData)[0]&0xff,((char*)passData)[1]&0xff,((char*)passData)[2]&0xff,((char*)passData)[3]&0xff,
+		((char*)passData)[4]&0xff,((char*)passData)[5]&0xff,((char*)passData)[6]&0xff,((char*)passData)[7]&0xff,
+		((char*)passData)[8]&0xff,((char*)passData)[9]&0xff,((char*)passData)[10]&0xff,((char*)passData)[11]&0xff,
+		((char*)passData)[12]&0xff,((char*)passData)[13]&0xff,((char*)passData)[14]&0xff,((char*)passData)[15]&0xff);
+*/
 	BF_KEY temp_key;
 	BF_set_key(&temp_key,passLen,(unsigned char*)passData);
 	unsigned char *encrypt_key = new unsigned char[8];
