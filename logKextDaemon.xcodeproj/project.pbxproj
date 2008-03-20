@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
+		F8C3DF670D366F28004CF3DE /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8C3DF660D366F28004CF3DE /* CoreFoundation.framework */; };
+		F8C3DFE10D367C89004CF3DE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8C3DFE00D367C89004CF3DE /* SystemConfiguration.framework */; };
 		F8D1916308EE2C0B00196CFE /* logKextDaemon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */; };
 		F8D1916508EE2C3700196CFE /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8D1916408EE2C3700196CFE /* IOKit.framework */; };
 		F8D1923708EE2D8700196CFE /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F8D1923608EE2D8700196CFE /* libcrypto.dylib */; };
@@ -29,9 +30,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		8DD76F7E0486A8DE00D96B5E /* logKextDaemon */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = logKextDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
 		F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logKextCommon.h; path = /Users/braden/Developer/code/logKext/logKextCommon.h; sourceTree = "<absolute>"; };
+		F8C3DF660D366F28004CF3DE /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		F8C3DFE00D367C89004CF3DE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = logKextDaemon.cpp; sourceTree = "<group>"; };
 		F8D1916408EE2C3700196CFE /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		F8D1923608EE2D8700196CFE /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.0.9.7.dylib; sourceTree = "<absolute>"; };
@@ -44,10 +46,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */,
 				F8D1916508EE2C3700196CFE /* IOKit.framework in Frameworks */,
 				F8D1923708EE2D8700196CFE /* libcrypto.dylib in Frameworks */,
 				F8F174E70D18D31600E84B30 /* Security.framework in Frameworks */,
+				F8C3DF670D366F28004CF3DE /* CoreFoundation.framework in Frameworks */,
+				F8C3DFE10D367C89004CF3DE /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,10 +80,11 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F8C3DFE00D367C89004CF3DE /* SystemConfiguration.framework */,
+				F8C3DF660D366F28004CF3DE /* CoreFoundation.framework */,
 				F8F174E60D18D31600E84B30 /* Security.framework */,
 				F8D1923608EE2D8700196CFE /* libcrypto.dylib */,
 				F8D1916408EE2C3700196CFE /* IOKit.framework */,
-				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";

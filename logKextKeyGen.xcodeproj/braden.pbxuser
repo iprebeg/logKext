@@ -3,38 +3,21 @@
 	08FB7793FE84155DC02AAC07 /* Project object */ = {
 		activeArchitecture = i386;
 		activeBuildConfigurationName = Deployment;
-		activeExecutable = F8D1915B08EE2BF700196CFE /* logKextDaemon */;
-		activeTarget = 8DD76F740486A8DE00D96B5E /* logKextDaemon */;
+		activeExecutable = F8A3F94C0D3315750073D03B /* logKextKeyGen */;
+		activeTarget = 8DD76F740486A8DE00D96B5E /* logKextKeyGen */;
 		addToTargets = (
-			8DD76F740486A8DE00D96B5E /* logKextDaemon */,
 		);
-		breakpoints = (
-		);
-		codeSenseManager = F8D1916108EE2BFD00196CFE /* Code sense */;
+		codeSenseManager = F8A3F9520D3315790073D03B /* Code sense */;
 		executables = (
-			F8D1915B08EE2BF700196CFE /* logKextDaemon */,
+			F8A3F94C0D3315750073D03B /* logKextKeyGen */,
 		);
 		perUserDictionary = {
-			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
-				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
-				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
-				PBXFileTableDataSourceColumnWidthsKey = (
-					22,
-					300,
-					57.58349609375,
-				);
-				PBXFileTableDataSourceColumnsKey = (
-					PBXExecutablesDataSource_ActiveFlagID,
-					PBXExecutablesDataSource_NameID,
-					PBXExecutablesDataSource_CommentsID,
-				);
-			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					120,
+					243,
 					20,
 					48,
 					43,
@@ -56,7 +39,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					80,
+					203,
 					60,
 					20,
 					48,
@@ -73,35 +56,35 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 227655758;
-			PBXWorkspaceStateSaveDate = 227655758;
+			PBXPerProjectTemplateStateSaveDate = 227656580;
+			PBXWorkspaceStateSaveDate = 227656580;
 		};
-		sourceControlManager = F8D1916008EE2BFD00196CFE /* Source Control */;
+		sourceControlManager = F8A3F9510D3315790073D03B /* Source Control */;
 		userBuildSettings = {
 		};
 	};
-	8DD76F740486A8DE00D96B5E /* logKextDaemon */ = {
-		activeExec = 0;
-		executables = (
-			F8D1915B08EE2BF700196CFE /* logKextDaemon */,
-		);
-	};
-	F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {
+	08FB7796FE84155DC02AAC07 /* logKextKeyGen.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {528, 504}}";
-			sepNavSelRange = "{626, 13}";
-			sepNavVisRange = "{241, 756}";
-			sepNavWindowFrame = "{{38, 255}, {523, 497}}";
+			sepNavIntBoundsRect = "{{0, 0}, {782, 1862}}";
+			sepNavSelRange = "{352, 0}";
+			sepNavVisRange = "{232, 454}";
+			sepNavWindowFrame = "{{270, 137}, {923, 641}}";
 		};
 	};
-	F8D1915B08EE2BF700196CFE /* logKextDaemon */ = {
+	8DD76F740486A8DE00D96B5E /* logKextKeyGen */ = {
+		activeExec = 0;
+		executables = (
+			F8A3F94C0D3315750073D03B /* logKextKeyGen */,
+		);
+	};
+	F8A3F94C0D3315750073D03B /* logKextKeyGen */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
 		);
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 1;
+		breakpointsEnabled = 0;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -114,38 +97,27 @@
 		executableSystemSymbolLevel = 0;
 		executableUserSymbolLevel = 0;
 		libgmallocEnabled = 0;
-		name = logKextDaemon;
+		name = logKextKeyGen;
 		sourceDirectories = (
 		);
 	};
-	F8D1916008EE2BFD00196CFE /* Source Control */ = {
+	F8A3F9510D3315790073D03B /* Source Control */ = {
 		isa = PBXSourceControlManager;
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
 		scmConfiguration = {
 		};
-		scmType = "";
 	};
-	F8D1916108EE2BFD00196CFE /* Code sense */ = {
+	F8A3F9520D3315790073D03B /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
 	};
-	F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */ = {
+	F8C99C390D33CECD009A32D9 /* logKextKeyGen.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {948, 9408}}";
-			sepNavSelRange = "{5071, 44}";
-			sepNavVisRange = "{4870, 1010}";
-			sepNavVisRect = "{{0, 2684}, {740, 107}}";
-			sepNavWindowFrame = "{{388, 133}, {890, 645}}";
-		};
-	};
-	F8D192B108EE31D900196CFE /* logKextDaemon.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {949, 308}}";
-			sepNavSelRange = "{275, 0}";
-			sepNavVisRange = "{3, 738}";
-			sepNavVisRect = "{{0, 0}, {703, 307}}";
-			sepNavWindowFrame = "{{30, 290}, {1008, 416}}";
+			sepNavIntBoundsRect = "{{0, 0}, {901, 521}}";
+			sepNavSelRange = "{268, 0}";
+			sepNavVisRange = "{0, 268}";
+			sepNavWindowFrame = "{{15, 124}, {960, 649}}";
 		};
 	};
 }
