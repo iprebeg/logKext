@@ -31,7 +31,7 @@
 
 /* Begin PBXFileReference section */
 		8DD76F7E0486A8DE00D96B5E /* logKextDaemon */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = logKextDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
-		F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logKextCommon.h; path = /Users/braden/Developer/code/logKext/logKextCommon.h; sourceTree = "<absolute>"; };
+		F86CC39D0D12DF6E0038E494 /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logKextCommon.h; sourceTree = SOURCE_ROOT; };
 		F8C3DF660D366F28004CF3DE /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		F8C3DFE00D367C89004CF3DE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		F8D1916208EE2C0B00196CFE /* logKextDaemon.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = logKextDaemon.cpp; sourceTree = "<group>"; };

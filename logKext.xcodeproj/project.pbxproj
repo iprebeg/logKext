@@ -21,21 +21,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextDaemon */;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
 			remoteInfo = logKextDaemon;
 		};
 		F8E8BA9F0D92ACB60074BAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextKeyGen */;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
 			remoteInfo = logKextKeyGen;
 		};
 		F8E8BAA70D92ACBC0074BAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextClient */;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
 			remoteInfo = logKextClient;
 		};
 /* End PBXContainerItemProxy section */
@@ -295,7 +295,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R $BUILD_DIR/packageGen/logKext.pmdoc $BUILD_DIR/packageGen/logKextCopy.pmdoc\n/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker --doc $BUILD_DIR/packageGen/logKextCopy.pmdoc -o $BUILD_DIR/logKext.pkg\nrm -rf $BUILD_DIR/packageGen/logKextCopy.pmdoc";
+			shellScript = "LK_INSTALL_ROOT=/tmp/logKextInstallRoot\nrm -rf $LK_INSTALL_ROOT\ncp -R $BUILD_DIR/packageGen $LK_INSTALL_ROOT\n/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker --doc $LK_INSTALL_ROOT/logKext.pmdoc -o $BUILD_DIR/logKext.pkg\nrm -rf $LK_INSTALL_ROOT";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -32,7 +32,7 @@
 		8DD76F7E0486A8DE00D96B5E /* logKextClient */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = logKextClient; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8610A0009284D26003C3B7F /* logKextClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logKextClient.h; sourceTree = "<group>"; };
 		F8610A2209284EF8003C3B7F /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.0.9.7.dylib; sourceTree = "<absolute>"; };
-		F86CC3AD0D12DF940038E494 /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logKextCommon.h; path = /Users/braden/Developer/code/logKext/logKextCommon.h; sourceTree = "<absolute>"; };
+		F86CC3AD0D12DF940038E494 /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logKextCommon.h; sourceTree = "<group>"; };
 		F890AC340D22FAE400A9C9B9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		F89F151F090DBF6B00543619 /* logKextClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = logKextClient.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */

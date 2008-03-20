@@ -31,7 +31,7 @@
 		8DD76F7E0486A8DE00D96B5E /* logKextKeyGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = logKextKeyGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A3F97A0D3316CF0073D03B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		F8C99C220D33CC63009A32D9 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
-		F8C99C390D33CECD009A32D9 /* logKextKeyGen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logKextKeyGen.h; path = /Users/braden/Developer/code/logkext/logKextKeyGen.h; sourceTree = "<absolute>"; };
+		F8C99C390D33CECD009A32D9 /* logKextKeyGen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logKextKeyGen.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
