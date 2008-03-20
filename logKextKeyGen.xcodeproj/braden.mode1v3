@@ -383,9 +383,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F8F46B690D91C3850033F3EC</string>
+				<string>F8143F500D92AA57009C9689</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F8F46B6A0D91C3850033F3EC</string>
+				<string>F8143F510D92AA57009C9689</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -519,6 +519,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>F8A3F96A0D3316920073D03B</string>
 		<string>/Users/braden/Developer/code/logkext/logKextKeyGen.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -543,7 +544,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>&lt;No Editor&gt;</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -560,8 +561,6 @@
 							<string>218pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -601,7 +600,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>F8A3F96A0D3316920073D03B</string>
-				<string>F8C99D7F0D346A64009A32D9</string>
+				<string>F8143F520D92AA57009C9689</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

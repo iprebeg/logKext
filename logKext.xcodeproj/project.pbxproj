@@ -14,32 +14,29 @@
 		F82A25A208EDD8FD0077C8EA /* logKextKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = F82A25A108EDD8FD0077C8EA /* logKextKeys.h */; };
 		F82A25A408EDD9020077C8EA /* logKextCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = F82A25A308EDD9020077C8EA /* logKextCommon.h */; };
 		F890ACBD0D22FF2900A9C9B9 /* logKext.kext in Copy Extension */ = {isa = PBXBuildFile; fileRef = 32D94FD00562CBF700B6AF17 /* logKext.kext */; };
-		F890ACC80D22FF8B00A9C9B9 /* logKextDaemon in Copy Daemon */ = {isa = PBXBuildFile; fileRef = F86CC3930D12DF530038E494 /* logKextDaemon */; };
-		F890ACD30D22FFD600A9C9B9 /* logKextClient in Copy Client */ = {isa = PBXBuildFile; fileRef = F86CC3A90D12DF8A0038E494 /* logKextClient */; };
-		F8C99C6D0D33D2C4009A32D9 /* logKextKeyGen in Copy KeyGen */ = {isa = PBXBuildFile; fileRef = F8A3F9590D3315D30073D03B /* logKextKeyGen */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F86CC3920D12DF530038E494 /* PBXContainerItemProxy */ = {
+		F8E8BA750D92AC8E0074BAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextDaemon */;
 			remoteInfo = logKextDaemon;
 		};
-		F86CC3A80D12DF8A0038E494 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
-			remoteInfo = logKextClient;
-		};
-		F8A3F9580D3315D30073D03B /* PBXContainerItemProxy */ = {
+		F8E8BA9F0D92ACB60074BAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextKeyGen */;
 			remoteInfo = logKextKeyGen;
+		};
+		F8E8BAA70D92ACBC0074BAC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76F7E0486A8DE00D96B5E /* logKextClient */;
+			remoteInfo = logKextClient;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -61,7 +58,6 @@
 			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
 			dstSubfolderSpec = 16;
 			files = (
-				F890ACC80D22FF8B00A9C9B9 /* logKextDaemon in Copy Daemon */,
 			);
 			name = "Copy Daemon";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +68,6 @@
 			dstPath = ../packageGen/Package_contents/usr/bin;
 			dstSubfolderSpec = 16;
 			files = (
-				F890ACD30D22FFD600A9C9B9 /* logKextClient in Copy Client */,
 			);
 			name = "Copy Client";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,7 +78,6 @@
 			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
 			dstSubfolderSpec = 16;
 			files = (
-				F8C99C6D0D33D2C4009A32D9 /* logKextKeyGen in Copy KeyGen */,
 			);
 			name = "Copy KeyGen";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,9 +94,9 @@
 		F82A259D08EDD8F90077C8EA /* logKext_UC.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = logKext_UC.cpp; sourceTree = "<group>"; };
 		F82A25A108EDD8FD0077C8EA /* logKextKeys.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logKextKeys.h; sourceTree = "<group>"; };
 		F82A25A308EDD9020077C8EA /* logKextCommon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logKextCommon.h; sourceTree = "<group>"; };
-		F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextDaemon.xcodeproj; path = /Users/braden/Developer/code/logKext/logKextDaemon.xcodeproj; sourceTree = "<absolute>"; };
-		F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextClient.xcodeproj; path = /Users/braden/Developer/code/logKext/logKextClient.xcodeproj; sourceTree = "<absolute>"; };
-		F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = logKextKeyGen.xcodeproj; path = /Users/braden/Developer/code/logkext/logKextKeyGen.xcodeproj; sourceTree = "<absolute>"; };
+		F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = logKextDaemon.xcodeproj; sourceTree = SOURCE_ROOT; };
+		F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = logKextClient.xcodeproj; sourceTree = SOURCE_ROOT; };
+		F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = logKextKeyGen.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,26 +153,26 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
-		F86CC38C0D12DF530038E494 /* Products */ = {
+		F8E8BA720D92AC8E0074BAC1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F86CC3930D12DF530038E494 /* logKextDaemon */,
+				F8E8BA760D92AC8E0074BAC1 /* logKextDaemon */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F86CC3A20D12DF8A0038E494 /* Products */ = {
+		F8E8BA9C0D92ACB60074BAC1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F86CC3A90D12DF8A0038E494 /* logKextClient */,
+				F8E8BAA00D92ACB60074BAC1 /* logKextKeyGen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F8A3F9550D3315D30073D03B /* Products */ = {
+		F8E8BAA40D92ACBC0074BAC1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F8A3F9590D3315D30073D03B /* logKextKeyGen */,
+				F8E8BAA80D92ACBC0074BAC1 /* logKextClient */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -235,15 +229,15 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = F86CC3A20D12DF8A0038E494 /* Products */;
+					ProductGroup = F8E8BAA40D92ACBC0074BAC1 /* Products */;
 					ProjectRef = F86CC3A10D12DF8A0038E494 /* logKextClient.xcodeproj */;
 				},
 				{
-					ProductGroup = F86CC38C0D12DF530038E494 /* Products */;
+					ProductGroup = F8E8BA720D92AC8E0074BAC1 /* Products */;
 					ProjectRef = F86CC38B0D12DF530038E494 /* logKextDaemon.xcodeproj */;
 				},
 				{
-					ProductGroup = F8A3F9550D3315D30073D03B /* Products */;
+					ProductGroup = F8E8BA9C0D92ACB60074BAC1 /* Products */;
 					ProjectRef = F8A3F9540D3315D30073D03B /* logKextKeyGen.xcodeproj */;
 				},
 			);
@@ -255,25 +249,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		F86CC3930D12DF530038E494 /* logKextDaemon */ = {
+		F8E8BA760D92AC8E0074BAC1 /* logKextDaemon */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = logKextDaemon;
-			remoteRef = F86CC3920D12DF530038E494 /* PBXContainerItemProxy */;
+			remoteRef = F8E8BA750D92AC8E0074BAC1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F86CC3A90D12DF8A0038E494 /* logKextClient */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = logKextClient;
-			remoteRef = F86CC3A80D12DF8A0038E494 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F8A3F9590D3315D30073D03B /* logKextKeyGen */ = {
+		F8E8BAA00D92ACB60074BAC1 /* logKextKeyGen */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = logKextKeyGen;
-			remoteRef = F8A3F9580D3315D30073D03B /* PBXContainerItemProxy */;
+			remoteRef = F8E8BA9F0D92ACB60074BAC1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F8E8BAA80D92ACBC0074BAC1 /* logKextClient */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = logKextClient;
+			remoteRef = F8E8BAA70D92ACBC0074BAC1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
