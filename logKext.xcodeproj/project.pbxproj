@@ -14,6 +14,9 @@
 		F82A25A208EDD8FD0077C8EA /* logKextKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = F82A25A108EDD8FD0077C8EA /* logKextKeys.h */; };
 		F82A25A408EDD9020077C8EA /* logKextCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = F82A25A308EDD9020077C8EA /* logKextCommon.h */; };
 		F890ACBD0D22FF2900A9C9B9 /* logKext.kext in Copy Extension */ = {isa = PBXBuildFile; fileRef = 32D94FD00562CBF700B6AF17 /* logKext.kext */; };
+		F8BE741B0D92B5D2007FFEEB /* logKextDaemon in Copy Daemon */ = {isa = PBXBuildFile; fileRef = F8E8BA760D92AC8E0074BAC1 /* logKextDaemon */; };
+		F8BE741C0D92B5D5007FFEEB /* logKextClient in Copy Client */ = {isa = PBXBuildFile; fileRef = F8E8BAA80D92ACBC0074BAC1 /* logKextClient */; };
+		F8BE741D0D92B5D7007FFEEB /* logKextKeyGen in Copy KeyGen */ = {isa = PBXBuildFile; fileRef = F8E8BAA00D92ACB60074BAC1 /* logKextKeyGen */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +61,7 @@
 			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
 			dstSubfolderSpec = 16;
 			files = (
+				F8BE741B0D92B5D2007FFEEB /* logKextDaemon in Copy Daemon */,
 			);
 			name = "Copy Daemon";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +72,7 @@
 			dstPath = ../packageGen/Package_contents/usr/bin;
 			dstSubfolderSpec = 16;
 			files = (
+				F8BE741C0D92B5D5007FFEEB /* logKextClient in Copy Client */,
 			);
 			name = "Copy Client";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +83,7 @@
 			dstPath = "../packageGen/Package_contents/Library/Application Support/logKext";
 			dstSubfolderSpec = 16;
 			files = (
+				F8BE741D0D92B5D7007FFEEB /* logKextKeyGen in Copy KeyGen */,
 			);
 			name = "Copy KeyGen";
 			runOnlyForDeploymentPostprocessing = 0;

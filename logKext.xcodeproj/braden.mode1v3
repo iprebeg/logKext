@@ -273,15 +273,17 @@
 								<string>F8A3F9540D3315D30073D03B</string>
 								<string>19C28FB6FE9D52B211CA2CBB</string>
 								<string>1C37FBAC04509CD000000102</string>
-								<string>F8E758AB0D92B05A00870828</string>
+								<string>F8BE74140D92B5C9007FFEEB</string>
+								<string>F8BE741E0D92B5DB007FFEEB</string>
+								<string>F8BE741F0D92B5DB007FFEEB</string>
+								<string>F8BE74200D92B5DB007FFEEB</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>27</integer>
-									<integer>18</integer>
-									<integer>17</integer>
+									<integer>11</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -304,7 +306,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>388 124 663 654 0 0 1280 778 </string>
+						<string>571 124 663 654 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -341,7 +343,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {455, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>388 124 663 654 0 0 1280 778 </string>
+								<string>571 124 663 654 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -361,7 +363,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {455, 608}}</string>
 								<key>RubberWindowFrame</key>
-								<string>388 124 663 654 0 0 1280 778 </string>
+								<string>571 124 663 654 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -385,9 +387,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F8E758AC0D92B05A00870828</string>
+				<string>F8BE74210D92B5DB007FFEEB</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F8E758AD0D92B05A00870828</string>
+				<string>F8BE74220D92B5DB007FFEEB</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -519,11 +521,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>F86CBB2E0D12DCD20038E494</string>
 		<string>/Users/braden/Developer/code/logkext/logKext.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>388 124 663 654 0 0 1280 778 </string>
+	<string>571 124 663 654 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
