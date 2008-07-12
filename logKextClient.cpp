@@ -74,7 +74,9 @@ int main(int argc, char * argv[])
 		fflush(0);
 		
 		char line[1024+1];
-		fgets(line, 1024, stdin);
+		if (!fgets(line, 1024, stdin))
+			break;
+		// remove newline
 		line[strlen(line)-1]=0;
 				
 		CFStringRef command = CFStringCreateWithCString(kCFAllocatorDefault,line,kCFStringEncodingASCII);
