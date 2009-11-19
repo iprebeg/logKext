@@ -135,7 +135,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		1DEB924808733DCA0010E9CD /* Debug */ = {
+		1DEB924808733DCA0010E9CD /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -147,7 +147,7 @@
 				PRODUCT_NAME = logKextKeyGen;
 				ZERO_LINK = YES;
 			};
-			name = Debug;
+			name = Development;
 		};
 		1DEB924908733DCA0010E9CD /* Deployment */ = {
 			isa = XCBuildConfiguration;
@@ -159,23 +159,23 @@
 			};
 			name = Deployment;
 		};
-		1DEB924C08733DCA0010E9CD /* Debug */ = {
+		1DEB924C08733DCA0010E9CD /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
-			name = Debug;
+			name = Development;
 		};
 		1DEB924D08733DCA0010E9CD /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
@@ -189,7 +189,7 @@
 		1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "logKextKeyGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB924808733DCA0010E9CD /* Debug */,
+				1DEB924808733DCA0010E9CD /* Development */,
 				1DEB924908733DCA0010E9CD /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -198,7 +198,7 @@
 		1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "logKextKeyGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB924C08733DCA0010E9CD /* Debug */,
+				1DEB924C08733DCA0010E9CD /* Development */,
 				1DEB924D08733DCA0010E9CD /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;

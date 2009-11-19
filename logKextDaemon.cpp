@@ -502,18 +502,19 @@ bail:
 void getBufferSizeAndKeys(int* size, int* keys)
 {
 	kern_return_t kernResult;
+	
+	uint64_t	scalarO_64[2];
+	uint32_t	outputCnt = 2;
 
-	UInt32		bufferSize=0;
-	UInt32		kextKeys=0;	
-
-    kernResult = IOConnectMethodScalarIScalarO(userClient,
-													klogKextBuffandKeys,	
-													0,					// input count
-													2,					// output count
-													&bufferSize,
-													&kextKeys);		// ptr to output structure
-	*size=bufferSize;
-	*keys=kextKeys;
+	kernResult = IOConnectCallScalarMethod(userClient, // mach port
+										   klogKextBuffandKeys,
+										   NULL,
+										   0,
+										   scalarO_64,
+										   &outputCnt);
+	
+	*size=scalarO_64[0];
+	*keys=scalarO_64[1];
 	return;
 }
 
@@ -521,14 +522,19 @@ CFStringRef getBuffer()
 {
 	kern_return_t kernResult;
 	bufferStruct myBufStruct;
-	IOByteCount structSize = sizeof(myBufStruct);
-
-    kernResult = IOConnectMethodScalarIStructureO(userClient,
-													 klogKextBuffer,	
-													 0,					// input count
-													 &structSize,
-													 &myBufStruct);
-
+	size_t structSize = sizeof(myBufStruct);
+	
+	kernResult = IOConnectCallMethod(userClient,
+									 klogKextBuffer,
+									 NULL,
+									 0,
+									 NULL,
+									 NULL,
+									 NULL,
+									 NULL,
+									 &myBufStruct,
+									 &structSize);
+	
 	CFDataRef result = CFDataCreate(kCFAllocatorDefault,myBufStruct.buffer,myBufStruct.bufLen);
 	CFMutableStringRef decodedData = CFStringCreateMutable(kCFAllocatorDefault,0);
 	

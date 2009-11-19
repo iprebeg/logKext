@@ -17,7 +17,7 @@
 	<key>CFBundleSignature</key>
 	<string>fsbs</string>
 	<key>CFBundleVersion</key>
-	<string>2.2</string>
+	<string>2.3</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>logKext</key>
@@ -27,7 +27,7 @@
 			<key>IOClass</key>
 			<string>com_fsb_iokit_logKext</string>
 			<key>IOMatchCategory</key>
-			<string>logKext</string>
+			<string>com_fsb_iokit_logKext</string>
 			<key>IOProviderClass</key>
 			<string>IOResources</string>
 			<key>IOResourceMatch</key>
@@ -39,15 +39,11 @@
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.iokit.IOHIDFamily</key>
-		<string>1.4</string>
-		<key>com.apple.kernel.bsd</key>
-		<string>7.9.9</string>
-		<key>com.apple.kernel.iokit</key>
-		<string>7.9.9</string>
-		<key>com.apple.kernel.libkern</key>
-		<string>7.9.9</string>
-		<key>com.apple.kernel.mach</key>
-		<string>7.9.9</string>
+		<string>1.5</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>9.0</string>
 	</dict>
 </dict>
 </plist>
