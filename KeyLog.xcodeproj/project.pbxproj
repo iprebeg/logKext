@@ -14,11 +14,11 @@
 /* Begin PBXFileReference section */
 		1A8381D515A37DB600ABE7AC /* KeyLog.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KeyLog.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A8381D915A37DB600ABE7AC /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
-		1A8381DC15A37DB600ABE7AC /* KeyLog-Info.plist */ = {isa = PBXFileReference; path = "KeyLog-Info.plist"; sourceTree = "<group>"; };
+		1A8381DC15A37DB600ABE7AC /* KeyLog-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KeyLog-Info.plist"; sourceTree = "<group>"; };
 		1A8381DE15A37DB600ABE7AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1A8381E015A37DB600ABE7AC /* KeyLog.h */ = {isa = PBXFileReference; path = KeyLog.h; sourceTree = "<group>"; };
+		1A8381E015A37DB600ABE7AC /* KeyLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyLog.h; sourceTree = "<group>"; };
 		1A8381E115A37DB600ABE7AC /* KeyLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyLog.cpp; sourceTree = "<group>"; };
-		1A8381E315A37DB600ABE7AC /* KeyLog-Prefix.pch */ = {isa = PBXFileReference; path = "KeyLog-Prefix.pch"; sourceTree = "<group>"; };
+		1A8381E315A37DB600ABE7AC /* KeyLog-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KeyLog-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,7 +237,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "KeyLog/KeyLog-Prefix.pch";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "KeyLog/KeyLog-Info.plist";
 				MODULE_NAME = com.prebeg.kext.KeyLog;
 				MODULE_VERSION = 1.0.0d1;
@@ -252,7 +252,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "KeyLog/KeyLog-Prefix.pch";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "KeyLog/KeyLog-Info.plist";
 				MODULE_NAME = com.prebeg.kext.KeyLog;
 				MODULE_VERSION = 1.0.0d1;
