@@ -19,6 +19,7 @@
 		1A8381E015A37DB600ABE7AC /* KeyLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyLog.h; sourceTree = "<group>"; };
 		1A8381E115A37DB600ABE7AC /* KeyLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyLog.cpp; sourceTree = "<group>"; };
 		1A8381E315A37DB600ABE7AC /* KeyLog-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KeyLog-Prefix.pch"; sourceTree = "<group>"; };
+		1AD1B7EE15A46CA900881A1F /* KeyLogKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyLogKeys.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +69,7 @@
 		1A8381DA15A37DB600ABE7AC /* KeyLog */ = {
 			isa = PBXGroup;
 			children = (
+				1AD1B7EE15A46CA900881A1F /* KeyLogKeys.h */,
 				1A8381E015A37DB600ABE7AC /* KeyLog.h */,
 				1A8381E115A37DB600ABE7AC /* KeyLog.cpp */,
 				1A8381DB15A37DB600ABE7AC /* Supporting Files */,
@@ -280,6 +282,7 @@
 				1A8381E815A37DB600ABE7AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

