@@ -418,6 +418,7 @@
 				INFOPLIST_FILE = Info.plist;
 				MODULE_NAME = com.fsb.kext.logKext;
 				MODULE_VERSION = 3.0;
+				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				PRODUCT_NAME = logKext;
 				WRAPPER_EXTENSION = kext;
@@ -438,6 +439,7 @@
 				INFOPLIST_FILE = Info.plist;
 				MODULE_NAME = com.fsb.kext.logKext;
 				MODULE_VERSION = 3.0;
+				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				PRODUCT_NAME = logKext;
 				WRAPPER_EXTENSION = kext;
@@ -456,6 +458,7 @@
 				INFOPLIST_FILE = Info.plist;
 				MODULE_NAME = com.fsb.kext.logKext;
 				MODULE_VERSION = 3.0;
+				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				PRODUCT_NAME = logKext;
 				WRAPPER_EXTENSION = kext;
@@ -465,7 +468,7 @@
 		F861090709283D43003C3B7F /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -474,7 +477,7 @@
 		F861090809283D43003C3B7F /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 			};
 			name = Deployment;
@@ -482,7 +485,7 @@
 		F861090909283D43003C3B7F /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 			};
 			name = Default;
