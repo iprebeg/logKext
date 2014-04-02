@@ -55,8 +55,8 @@ class com_fsb_iokit_logKext : public IOService
 		IONotifier			*notifyTerm;
 				
 		// notification handler
-		static bool myNotificationHandler(void *target, void *ref, IOService *newServ);
-		static bool termNotificationHandler(void *target, void *ref, IOService *newServ);		
+		static bool myNotificationHandler(void *target, void *ref, IOService *newServ, IONotifier *notifier);
+		static bool termNotificationHandler(void *target, void *ref, IOService *newServ, IONotifier *notifier);		
 		
     public:
 
