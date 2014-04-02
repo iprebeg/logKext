@@ -34,7 +34,7 @@ bool logKextUserClient::initWithTask( task_t owningTask,
 	}
 
 	#ifdef DEBUG
-		IOLog("logKextUserClient::initWithTask(type %ld)\n", type);
+		IOLog("logKextUserClient::initWithTask(type %u)\n", (unsigned int)type);
 	#endif
 	
 	if (!super::initWithTask(owningTask, securityID, type))
