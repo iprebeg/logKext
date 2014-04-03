@@ -35,9 +35,9 @@
 #undef protected
 
 void logAction(OSObject *,unsigned,unsigned,unsigned,unsigned,
-				unsigned,unsigned,unsigned,unsigned,bool,AbsoluteTime);
+				unsigned,unsigned,unsigned,unsigned,bool,AbsoluteTime, OSObject*, void *);
 				
-void specialAction(OSObject *,unsigned,unsigned,unsigned,unsigned,UInt64,bool,AbsoluteTime);
+void specialAction(OSObject *,unsigned,unsigned,unsigned,unsigned,UInt64,bool,AbsoluteTime, OSObject *, void *);
 
 class com_fsb_iokit_logKext : public IOService
 {
