@@ -1,5 +1,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
+#include <openssl/rand.h>
 #include "logKextKeyGen.h"
 
 void removeKey()
