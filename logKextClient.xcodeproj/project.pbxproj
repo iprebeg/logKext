@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A49718C18E4E5A8008A1EEB /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A49718B18E4E5A8008A1EEB /* libcrypto.dylib */; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
 		F8610A0109284D26003C3B7F /* logKextClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F8610A0009284D26003C3B7F /* logKextClient.h */; };
-		F8610A2309284EF8003C3B7F /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F8610A2209284EF8003C3B7F /* libcrypto.dylib */; };
 		F890AC350D22FAE400A9C9B9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F890AC340D22FAE400A9C9B9 /* Security.framework */; };
 		F89F1520090DBF6B00543619 /* logKextClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F89F151F090DBF6B00543619 /* logKextClient.cpp */; };
 /* End PBXBuildFile section */
@@ -29,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		1A49718918E4E595008A1EEB /* libcrypto.0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.0.9.7.dylib; path = usr/lib/libcrypto.0.9.7.dylib; sourceTree = SDKROOT; };
+		1A49718B18E4E5A8008A1EEB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		8DD76F7E0486A8DE00D96B5E /* logKextClient */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = logKextClient; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8610A0009284D26003C3B7F /* logKextClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logKextClient.h; sourceTree = "<group>"; };
 		F8610A2209284EF8003C3B7F /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.0.9.7.dylib; sourceTree = "<absolute>"; };
@@ -42,8 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A49718C18E4E5A8008A1EEB /* libcrypto.dylib in Frameworks */,
 				8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */,
-				F8610A2309284EF8003C3B7F /* libcrypto.dylib in Frameworks */,
 				F890AC350D22FAE400A9C9B9 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,6 +56,8 @@
 		08FB7794FE84155DC02AAC07 /* logKextClient */ = {
 			isa = PBXGroup;
 			children = (
+				1A49718B18E4E5A8008A1EEB /* libcrypto.dylib */,
+				1A49718918E4E595008A1EEB /* libcrypto.0.9.7.dylib */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E96029091FE04C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -123,9 +127,16 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
 			buildConfigurationList = F861094B09284004003C3B7F /* Build configuration list for PBXProject "logKextClient" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* logKextClient */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -197,27 +208,22 @@
 		F861094C09284004003C3B7F /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
 			};
 			name = Development;
 		};
 		F861094D09284004003C3B7F /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx;
 			};
 			name = Deployment;
 		};
 		F861094E09284004003C3B7F /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx;
 			};
 			name = Default;
 		};

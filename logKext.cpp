@@ -23,8 +23,8 @@
 #include <libkern/c++/OSCollection.h>
 
 com_fsb_iokit_logKext		*logService;
-KeyboardEventAction			origAction;
-KeyboardSpecialEventAction	origSpecialAction;
+KeyboardEventCallback			origAction;
+KeyboardSpecialEventCallback	origSpecialAction;
 
 #define super IOService
 
@@ -32,7 +32,8 @@ OSDefineMetaClassAndStructors(com_fsb_iokit_logKext, IOService);
 
 bool com_fsb_iokit_logKext::termNotificationHandler(void *target, 
 													void *ref, 
-													IOService *newServ)
+													IOService *newServ,
+                                                    IONotifier *notifer)
 {
 	com_fsb_iokit_logKext* self = OSDynamicCast( com_fsb_iokit_logKext, (OSMetaClassBase*)target );
 	if (!self)
@@ -53,7 +54,7 @@ bool com_fsb_iokit_logKext::termNotificationHandler(void *target,
 	if (index>=0)
 	{
 		#ifdef DEBUG
-			IOLog( "%s::Removing keyboard %x\n", self->getName(),keyboard );
+			IOLog( "%s::Removing keyboard %p\n", self->getName(),keyboard );
 		#endif
 
 		self->kextKeys--;
@@ -65,7 +66,8 @@ bool com_fsb_iokit_logKext::termNotificationHandler(void *target,
 
 bool com_fsb_iokit_logKext::myNotificationHandler(void *target, 
 													void *ref, 
-													IOService *newServ)
+													IOService *newServ,
+                                                  IONotifier *notifier)
 {
 	com_fsb_iokit_logKext* self = OSDynamicCast( com_fsb_iokit_logKext, (OSMetaClassBase*)target );
 	if (!self)
@@ -102,7 +104,7 @@ bool com_fsb_iokit_logKext::myNotificationHandler(void *target,
 
 	// we have a valid keyboard to be logged
 	#ifdef DEBUG
-		IOLog( "%s::Adding keyboard %x\n", self->getName(),keyboard );
+		IOLog( "%s::Adding keyboard %p\n", self->getName(),keyboard );
 	#endif
 
 	int index = self->loggedKeyboards->getNextIndexOfObject(keyboard,0);
@@ -112,10 +114,10 @@ bool com_fsb_iokit_logKext::myNotificationHandler(void *target,
 		self->kextKeys++;
 	}
 
-	origAction = keyboard->_keyboardEventAction;		// save the original action
+	origAction = (KeyboardEventCallback)keyboard->_keyboardEventAction;		// save the original action
 	keyboard->_keyboardEventAction = (KeyboardEventAction) logAction;	// apply the new action
 
-	origSpecialAction = keyboard->_keyboardSpecialEventAction;		// save the original action
+	origSpecialAction = (KeyboardSpecialEventCallback)keyboard->_keyboardSpecialEventAction;		// save the original action
 	keyboard->_keyboardSpecialEventAction = (KeyboardSpecialEventAction) specialAction;	// apply the new action
 
 	return true;
@@ -145,10 +147,10 @@ bool com_fsb_iokit_logKext::start(IOService *provider)
 				
 	registerService();	// make us visible in the IORegistry for matching by IOServiceGetMatchingServices
 
-	notifyTerm = addNotification(gIOTerminatedNotification,
+	notifyTerm = addMatchingNotification(gIOTerminatedNotification,
 							serviceMatching("IOHIKeyboard"), 
-							(IOServiceNotificationHandler) &com_fsb_iokit_logKext::termNotificationHandler,
-							this, 0);
+							(IOServiceMatchingNotificationHandler) &com_fsb_iokit_logKext::termNotificationHandler,
+							this);
 
 	if(!result)	// if we failed for some reason
 	{
@@ -177,9 +179,9 @@ void com_fsb_iokit_logKext::clearKeyboards()
 			IOHIKeyboard *curKeyboard = (IOHIKeyboard*)loggedKeyboards->getObject(0);
 
 			if (origSpecialAction)
-				curKeyboard->_keyboardSpecialEventAction = origSpecialAction;
+				curKeyboard->_keyboardSpecialEventAction = (KeyboardSpecialEventAction)origSpecialAction;
 			if (origAction)
-				curKeyboard->_keyboardEventAction = origAction;
+				curKeyboard->_keyboardEventAction = (KeyboardEventAction)origAction;
 			
 			loggedKeyboards->removeObject(0);
 			kextKeys--;
@@ -193,9 +195,9 @@ void com_fsb_iokit_logKext::clearKeyboards()
 void com_fsb_iokit_logKext::activate()
 {
 
-	notify = addNotification(gIOPublishNotification,
+	notify = addMatchingNotification(gIOPublishNotification,
 							serviceMatching("IOHIKeyboard"), 
-							(IOServiceNotificationHandler) &com_fsb_iokit_logKext::myNotificationHandler,
+							(IOServiceMatchingNotificationHandler) &com_fsb_iokit_logKext::myNotificationHandler,
 							this, 0);
 
 	#ifdef DEBUG
@@ -331,13 +333,15 @@ void specialAction(OSObject * target,
                     /* specialty */        unsigned   flavor,
                     /* source id */        UInt64     guid,
                     /* repeat */           bool       repeat,
-                    /* atTime */           AbsoluteTime ts)
+                    /* atTime */           AbsoluteTime ts,
+                   OSObject *sender,
+                   void * refcon __unused)
 {
 	if ((eventType==NX_SYSDEFINED)&&(!flags)&&(key==NX_NOSPECIALKEY))	// only sign of a logout (also thrown when sleeping)
 		logService->clearKeyboards();
 
 	if (origSpecialAction)
-		(*origSpecialAction)(target,eventType,flags,key,flavor,guid,repeat,ts);
+		(*origSpecialAction)(target,eventType,flags,key,flavor,guid,repeat,ts,sender,0);
 }
 
 
@@ -351,10 +355,13 @@ void logAction(OSObject * target,
 				/* originalCharSet */  unsigned   origCharSet,
 				/* keyboardType */     unsigned   keyboardType,
 				/* repeat */           bool       repeat,
-				/* atTime */           AbsoluteTime ts)
+				/* atTime */           AbsoluteTime ts,
+               OSObject *sender,
+               void * refcon __unused)
 {
 	if ((eventType==NX_KEYDOWN)&&logService)
 		logService->logStroke(key, flags, charCode);
+
 	if (origAction)
-		(*origAction)(target,eventType,flags,key,charCode,charSet,origCharCode,origCharSet,keyboardType,repeat,ts);
+		(*origAction)(target,eventType,flags,key,charCode,charSet,origCharCode,origCharSet,keyboardType,repeat,ts, sender, 0);
 }
